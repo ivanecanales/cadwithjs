@@ -28,3 +28,17 @@ function setPaperSize(dwgw, dwgh, margin){
     style.innerHTML = headcss;
     document.head.appendChild(style);
 };
+class Point{
+    constructor(x, y){
+        this.x = x;
+        this.y = y;
+    };
+};
+function pointsToCoords(points){
+    const coords = [];
+    for(const point of points){
+        coords.push(point.x);
+        coords.push(point.y);
+    }
+    return coords;
+};
