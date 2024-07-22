@@ -12,4 +12,19 @@ function graphicElement(tag, attributes, parent, innerhtml){
     };
     return element;
 };
-function setPaperSize(){};
+function setPaperSize(dwgw, dwgh, margin){
+    const bodyw = dwgw + 2 * margin;
+    const bodyh = dwgh + 2 * margin;
+    const headcss = `
+    body{
+        width: ${bodyw}mm;
+        height: ${bodyh}mm;
+    }
+    @page{
+        size: ${bodyw}mm ${bodyh}mm;
+        margin: 0;
+    }`;
+    const style = document.createElement('style');
+    style.innerHTML = headcss;
+    document.head.appendChild(style);
+};

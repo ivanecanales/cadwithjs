@@ -1,11 +1,14 @@
+const dwgw = 130;
+const dwgh = 110;
+const margin = 10;
+setPaperSize(dwgw, dwgh, margin);
 const dwg = graphicElement(
     'svg',
     {
-        'viewBox': [-10, -20, 130, 110],
-        'width': '130mm',
-        'height': '110mm',
+        'viewBox': [-10, -20, dwgw, dwgh],
+        'width': `${dwgw}mm`,
+        'height': `${dwgh}mm`,
         'transform': 'scale(1, -1)',
-        'style': 'border: solid grey 1px;'
     },
     document.body
 );
@@ -70,18 +73,6 @@ for(const al of arrowLoc){
         dwg
     );
 };
-
-
-graphicElement(
-    'polyline',
-    {
-        'points': [0, 0, 100, 0, 100, 20, 80, 20, 80, 50, 60, 50, 60, 70, 40, 70, 40, 50, 20, 50, 20, 20, 0, 20, 0, 0],
-        'stroke': 'black',
-        'stroke-width': 1,
-        'fill': 'lawngreen'
-    },
-    dwg
-);
 const d = 2.5;
 const dimensions = [
     {'l': 2, 'o': 'h', 'c': [10, 80]},
@@ -112,3 +103,11 @@ for(const dim of dimensions){
         dim['l']
     );
 };
+graphicElement(
+    'polyline',
+    {
+        'points': [0, 0, 100, 0, 100, 20, 80, 20, 80, 50, 60, 50, 60, 70, 40, 70, 40, 50, 20, 50, 20, 20, 0, 20, 0, 0],
+        'class': 'part'
+    },
+    dwg
+);

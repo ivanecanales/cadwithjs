@@ -1,32 +1,35 @@
 html{
-    background: white;
-    --paper-color: khaki;
+    --paper-color: blanchedalmond;
+    --part-color: greenyellow;
+    --dim-color: teal;
 }
 body{
-    width: 150mm;
-    height: 130mm;
     border: solid black 1px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 10px auto;
-    background: var(--paper-color);
 }
 polyline{
     stroke-linecap: round;
     stroke-linejoin: round;
 }
+svg{
+    border: solid grey 1px;
+    background: var(--paper-color);
+}
 .dimline{
     stroke-width: 0.5;
-    stroke: teal;
+    stroke: var(--dim-color);
 }
 .dimarrow{
-    fill: teal;
+    fill: var(--dim-color);
     stroke: none;
 }
-@page{
-    size: 150mm 130mm;
-    margin: 0;
+.part{
+    stroke: black;
+    stroke-width: 1;
+    fill: var(--part-color);
 }
 @media print{
     body{
