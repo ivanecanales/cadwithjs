@@ -12,3 +12,4 @@ function graphicElement(tag, attributes, parent, innerhtml){
     };
     return element;
 };
+function setPaperSize(){};
