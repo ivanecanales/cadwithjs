@@ -1,22 +1,33 @@
 html{
     background: white;
+    --paper-color: khaki;
 }
 body{
-    background: lightsalmon;
-    width: 100mm;
-    height: 100mm;
+    width: 150mm;
+    height: 120mm;
     border: solid black 1px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 10px auto;
+    background: var(--paper-color);
 }
-
+polyline{
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.dimline{
+    stroke-width: 0.5;
+    stroke: teal;
+}
+.dimarrow{
+    fill: teal;
+    stroke: none;
+}
 @page{
-    size: 100mm 100mm;
+    size: 150mm 120mm;
     margin: 0;
 }
-
 @media print{
     body{
         margin: 0;
