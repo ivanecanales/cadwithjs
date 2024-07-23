@@ -42,3 +42,51 @@ function pointsToCoords(points){
     }
     return coords;
 };
+function drawDim(pi, pj, o, s, d, parent){
+    const mt = matrix => {return `matrix(${matrix})`};
+    const tg = 'polyline';
+    const pl = pi.x <= pj.x ? pi : pj;
+    const pr = pi.x <= pj.x ? pj : pi;
+    const pb = pi.y <= pj.y ? pi : pj;
+    const pu = pi.y <= pj.y ? pj : pi;
+    const gr = graphicElement('g', {}, parent);
+    const ar = {
+        'h': [0, 1.5, 3, 3, 3, 0, 0, 1.5],
+        'v': [0, 3, 3, 3, 1.5, 0, 0, 3]
+    };
+    if(o == 'h'){
+        if(s == 'b'){
+            graphicElement(tg, {'points': [pl.x, pl.y, pl.x, pb.y - d], 'class': 'dimline'}, gr);
+            graphicElement(tg, {'points': [pr.x, pr.y, pr.x, pb.y - d], 'class': 'dimline'}, gr);
+            graphicElement(tg, {'points': [pl.x, pb.y - d + 1.5, pr.x, pb.y - d + 1.5], 'class': 'dimline'}, gr);
+            graphicElement(tg, {'points': ar[o], 'class': 'dimarrow', 'transform': mt([1, 0, 0, 1, pl.x, pl.y - d])}, gr);
+            graphicElement(tg, {'points': ar[o], 'class': 'dimarrow', 'transform': mt([-1, 0, 0, 1, pr.x, pl.y - d])}, gr);
+        }else if(s == 'u'){
+            graphicElement(tg, {'points': [pl.x, pl.y, pl.x, pu.y + d], 'class': 'dimline'}, gr);
+            graphicElement(tg, {'points': [pr.x, pr.y, pr.x, pu.y + d], 'class': 'dimline'}, gr);
+            graphicElement(tg, {'points': [pl.x, pu.y + d - 1.5, pr.x, pu.y + d - 1.5], 'class': 'dimline'}, gr);
+            graphicElement(tg, {'points': ar[o], 'class': 'dimarrow', 'transform': mt([1, 0, 0, 1, pl.x, pu.y + d - 3])}, gr);
+            graphicElement(tg, {'points': ar[o], 'class': 'dimarrow', 'transform': mt([-1, 0, 0, 1, pr.x, pu.y + d - 3])}, gr);
+        }else{
+            throw 'Invalid side';
+        };
+    }else if(o == 'v'){
+        if(s == 'l'){
+            graphicElement(tg, {'points': [pl.x - d, pu.y, pu.x, pu.y], 'class': 'dimline'}, gr);
+            graphicElement(tg, {'points': [pl.x - d, pb.y, pb.x, pb.y], 'class': 'dimline'}, gr);
+            graphicElement(tg, {'points': [pl.x - d + 1.5, pu.y, pl.x - d + 1.5, pb.y], 'class': 'dimline'}, gr);
+            graphicElement(tg, {'points': ar[o], 'class': 'dimarrow', 'transform': mt([1, 0, 0, 1, pl.x - d, pb.y])}, gr);
+            graphicElement(tg, {'points': ar[o], 'class': 'dimarrow', 'transform': mt([1, 0, 0, -1, pr.x - d, pu.y])}, gr);
+        }else if(s == 'r'){
+            graphicElement(tg, {'points': [pr.x + d, pu.y, pu.x, pu.y], 'class': 'dimline'}, gr);
+            graphicElement(tg, {'points': [pr.x + d, pb.y, pb.x, pb.y], 'class': 'dimline'}, gr);
+            graphicElement(tg, {'points': [pr.x + d - 1.5, pu.y, pl.x + d - 1.5, pb.y], 'class': 'dimline'}, gr);
+            graphicElement(tg, {'points': ar[o], 'class': 'dimarrow', 'transform': mt([1, 0, 0, 1, pl.x + d - 3, pb.y])}, gr);
+            graphicElement(tg, {'points': ar[o], 'class': 'dimarrow', 'transform': mt([1, 0, 0, -1, pr.x + d - 3, pu.y])}, gr);
+        }else{
+            throw 'Invalid side';
+        };  
+    }else{
+        throw 'Invalid orientation';
+    };
+};
