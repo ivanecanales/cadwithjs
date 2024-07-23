@@ -12,21 +12,8 @@ const dwg = graphicElement(
     },
     document.body
 );
-const part = [
-    new Point(20, 0),
-    new Point(50, 0),
-    new Point(50, 30),
-    new Point(100, 30),
-    new Point(100, 60),
-    new Point(50, 60),
-    new Point(50, 90),
-    new Point(20, 90),
-    new Point(20, 80),
-    new Point(0, 80),
-    new Point(0, 20),
-    new Point(20, 20),
-    new Point(20, 0)
-];
+const points = [20, 0, 50, 0, 50, 30, 100, 30, 100, 60, 50, 60, 50, 90, 20, 90, 20, 80, 0, 80, 0, 20, 20, 20, 20, 0];
+const part = pointsToCoords(points);
 drawDim(part[10], part[11], 'h', 'b', 30, dwg);
 drawDim(part[0], part[1], 'h', 'b', 10, dwg);
 drawDim(part[2], part[3], 'h', 'b', 40, dwg);
@@ -68,7 +55,7 @@ for(const dim of dimensions){
 graphicElement(
     'polyline',
     {
-        'points': pointsToCoords(part),
+        'points': points,
         'class': 'part'
     },
     dwg

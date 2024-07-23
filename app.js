@@ -36,10 +36,9 @@ class Point{
 };
 function pointsToCoords(points){
     const coords = [];
-    for(const point of points){
-        coords.push(point.x);
-        coords.push(point.y);
-    }
+    for(let i = 0; i < points.length; i += 2){
+        coords.push(new Point(points[i], points[i + 1]));
+    };
     return coords;
 };
 function drawDim(pi, pj, o, s, d, parent){
