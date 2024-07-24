@@ -49,10 +49,7 @@ function drawDim(pi, pj, o, s, d, l, parent){
     const pb = pi.y <= pj.y ? pi : pj;
     const pu = pi.y <= pj.y ? pj : pi;
     const gr = graphicElement('g', {}, parent);
-    const ar = {
-        'h': [0, 1.5, 3, 3, 3, 0, 0, 1.5],
-        'v': [0, 3, 3, 3, 1.5, 0, 0, 3]
-    };
+    const ar = [3, 0, 3, -3, 0, -1.5, 3, 0];
     const gt = graphicElement('g', {}, parent);
     const fs = 5;
     const rc = 0.5 * fs * l.toString().length;
@@ -76,16 +73,15 @@ function drawDim(pi, pj, o, s, d, l, parent){
             graphicElement(tg, {'points': [pl.x, pl.y, pl.x, pb.y - d], 'class': 'dimline'}, gr);
             graphicElement(tg, {'points': [pr.x, pr.y, pr.x, pb.y - d], 'class': 'dimline'}, gr);
             graphicElement(tg, {'points': [pl.x, pb.y - d + 1.5, pr.x, pb.y - d + 1.5], 'class': 'dimline'}, gr);
-            graphicElement(tg, {'points': ar[o], 'class': 'dimarrow', 'transform': mt([1, 0, 0, 1, pl.x, pl.y - d])}, gr);
-            graphicElement(tg, {'points': ar[o], 'class': 'dimarrow', 'transform': mt([-1, 0, 0, 1, pr.x, pl.y - d])}, gr);
+            graphicElement(tg, {'points': ar, 'class': 'dimarrow', 'transform': mt([1, 0, 0, -1, pl.x, pl.y - d])}, gr);
+            graphicElement(tg, {'points': ar, 'class': 'dimarrow', 'transform': mt([-1, 0, 0, -1, pr.x, pl.y - d])}, gr);
             gt.setAttribute('transform', mt([1, 0, 0, 1, 0.5 * (pl.x + pr.x), pb.y - d - 0.5 * fs]));
         }else if(s == 'u'){
-            console.log(pl, pr, pb, pu);
             graphicElement(tg, {'points': [pl.x, pl.y, pl.x, pu.y + d], 'class': 'dimline'}, gr);
             graphicElement(tg, {'points': [pr.x, pr.y, pr.x, pu.y + d], 'class': 'dimline'}, gr);
             graphicElement(tg, {'points': [pl.x, pu.y + d - 1.5, pr.x, pu.y + d - 1.5], 'class': 'dimline'}, gr);
-            graphicElement(tg, {'points': ar[o], 'class': 'dimarrow', 'transform': mt([1, 0, 0, 1, pl.x, pu.y + d - 3])}, gr);
-            graphicElement(tg, {'points': ar[o], 'class': 'dimarrow', 'transform': mt([-1, 0, 0, 1, pr.x, pu.y + d - 3])}, gr);
+            graphicElement(tg, {'points': ar, 'class': 'dimarrow', 'transform': mt([1, 0, 0, 1, pl.x, pu.y + d])}, gr);
+            graphicElement(tg, {'points': ar, 'class': 'dimarrow', 'transform': mt([-1, 0, 0, 1, pr.x, pu.y + d])}, gr);
             gt.setAttribute('transform', mt([1, 0, 0, 1, 0.5 * (pl.x + pr.x), pu.y + d + 0.5 * fs]));
         }else{
             throw 'Invalid side';
@@ -95,16 +91,16 @@ function drawDim(pi, pj, o, s, d, l, parent){
             graphicElement(tg, {'points': [pl.x - d, pu.y, pu.x, pu.y], 'class': 'dimline'}, gr);
             graphicElement(tg, {'points': [pl.x - d, pb.y, pb.x, pb.y], 'class': 'dimline'}, gr);
             graphicElement(tg, {'points': [pl.x - d + 1.5, pu.y, pl.x - d + 1.5, pb.y], 'class': 'dimline'}, gr);
-            graphicElement(tg, {'points': ar[o], 'class': 'dimarrow', 'transform': mt([1, 0, 0, 1, pl.x - d, pb.y])}, gr);
-            graphicElement(tg, {'points': ar[o], 'class': 'dimarrow', 'transform': mt([1, 0, 0, -1, pr.x - d, pu.y])}, gr);
+            graphicElement(tg, {'points': ar, 'class': 'dimarrow', 'transform': mt([0, 1, -1, 0, pl.x - d, pb.y])}, gr);
+            graphicElement(tg, {'points': ar, 'class': 'dimarrow', 'transform': mt([0, -1, -1, 0, pr.x - d, pu.y])}, gr);
             gt.setAttribute('transform', mt([1, 0, 0, 1, pr.x - d - 0.5 * rc, 0.5 * (pb.y + pu.y)]));
 
         }else if(s == 'r'){
             graphicElement(tg, {'points': [pr.x + d, pu.y, pu.x, pu.y], 'class': 'dimline'}, gr);
             graphicElement(tg, {'points': [pr.x + d, pb.y, pb.x, pb.y], 'class': 'dimline'}, gr);
             graphicElement(tg, {'points': [pr.x + d - 1.5, pu.y, pl.x + d - 1.5, pb.y], 'class': 'dimline'}, gr);
-            graphicElement(tg, {'points': ar[o], 'class': 'dimarrow', 'transform': mt([1, 0, 0, 1, pl.x + d - 3, pb.y])}, gr);
-            graphicElement(tg, {'points': ar[o], 'class': 'dimarrow', 'transform': mt([1, 0, 0, -1, pr.x + d - 3, pu.y])}, gr);
+            graphicElement(tg, {'points': ar, 'class': 'dimarrow', 'transform': mt([0, 1, 1, 0, pl.x + d, pb.y])}, gr);
+            graphicElement(tg, {'points': ar, 'class': 'dimarrow', 'transform': mt([0, -1, -1, 0, pr.x + d - 3, pu.y])}, gr);
             gt.setAttribute('transform', mt([1, 0, 0, 1, pr.x + d + 0.5 * rc, 0.5 * (pb.y + pu.y)]));
         }else{
             throw 'Invalid side';
