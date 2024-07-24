@@ -2,16 +2,7 @@ const dwgw = 130;
 const dwgh = 140;
 const margin = 10;
 setPaperSize(dwgw, dwgh, margin);
-const dwg = graphicElement(
-    'svg',
-    {
-        'viewBox': [-10, -20, dwgw, dwgh],
-        'width': `${dwgw}mm`,
-        'height': `${dwgh}mm`,
-        'transform': 'scale(1, -1)',
-    },
-    document.body
-);
+const dwg = createDwg(-10, -20, dwgw, dwgh);
 const points = [0, 0, 100, 0, 100, 20, 80, 20, 80, 40, 40, 40, 40, 80, 20, 80, 20, 100, 0, 100, 0, 0];
 const part = pointsToCoords(points);
 drawDim(part[0], part[1], 'h', 'b', 10, 10, dwg);

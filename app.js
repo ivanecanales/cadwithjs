@@ -28,6 +28,18 @@ function setPaperSize(dwgw, dwgh, margin){
     style.innerHTML = headcss;
     document.head.appendChild(style);
 };
+function createDwg(minx, miny, dwgw, dwgh){
+    return graphicElement(
+        'svg',
+        {
+            'viewBox': [minx, miny, dwgw, dwgh],
+            'width': `${dwgw}mm`,
+            'height': `${dwgh}mm`,
+            'transform': 'scale(1, -1)',
+        },
+        document.body
+    );
+};
 class Point{
     constructor(x, y){
         this.x = x;
