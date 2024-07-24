@@ -41,6 +41,23 @@ function pointsToCoords(points){
     };
     return coords;
 };
+function textElement(fontSize, dimension, rectLength, parent){
+    graphicElement(
+        'text',
+        {
+            'x': -0.5 * rectLength,
+            'y': 0.3 * fontSize,
+            'font-family': 'Ubuntu Mono',
+            'font-size': fontSize,
+            'textLength': rectLength,
+            'lengthAdjust': 'spacingAndGlyphs',
+            'transform': 'scale(1, -1)',
+            'class': 'dimtext'
+        },
+        parent,
+        dimension
+    );
+};
 function drawDim(pi, pj, o, s, d, l, parent){
     const mt = matrix => {return `matrix(${matrix})`};
     const tg = 'polyline';
@@ -48,27 +65,11 @@ function drawDim(pi, pj, o, s, d, l, parent){
     const pr = pi.x <= pj.x ? pj : pi;
     const pb = pi.y <= pj.y ? pi : pj;
     const pu = pi.y <= pj.y ? pj : pi;
-    const ar = [3, 0, 3, -3, 0, -1.5, 3, 0];
-    const gt = graphicElement('g', {}, parent);
-    const fs = 5;
-    const rc = 0.5 * fs * l.toString().length;
+    const ar = [3, 0, 3, -3, 0, -1.5, 3, 0];    
     const da = {'h': {'b': -1, 'u': 1}, 'v': {'l': -1, 'r': 1}}
     const pt = {'u': pu, 'b': pb, 'l': pl, 'r': pr};
-    graphicElement(
-        'text',
-        {
-            'x': -0.5 * rc,
-            'y': 0.3 * fs,
-            'font-family': 'Ubuntu Mono',
-            'font-size': fs,
-            'textLength': rc,
-            'lengthAdjust': 'spacingAndGlyphs',
-            'transform': 'scale(1, -1)',
-            'class': 'dimtext'
-        },
-        gt,
-        l
-    );
+    const fs = 5;
+    const rc = 0.5 * fs * l.toString().length;
     if(o == 'h'){
         if(!(s == 'b' || s == 'u')){throw 'Invalid side'};
         graphicElement(tg, {'points': [pl.x, pl.y, pl.x, pt[s].y + da[o][s] * d], 'class': 'dimline'}, parent);
@@ -76,7 +77,8 @@ function drawDim(pi, pj, o, s, d, l, parent){
         graphicElement(tg, {'points': [pl.x, pt[s].y + da[o][s] * (d - 1.5), pr.x, pt[s].y + da[o][s] * (d - 1.5)], 'class': 'dimline'}, parent);
         graphicElement(tg, {'points': ar, 'class': 'dimarrow', 'transform': mt([1, 0, 0, da[o][s], pl.x, pt[s].y + da[o][s] * d])}, parent);
         graphicElement(tg, {'points': ar, 'class': 'dimarrow', 'transform': mt([-1, 0, 0, da[o][s], pr.x, pt[s].y + da[o][s] * d])}, parent);
-        gt.setAttribute('transform', mt([1, 0, 0, 1, 0.5 * (pl.x + pr.x), pt[s].y + da[o][s] * (d + 0.5 * fs)]));
+        const gt = graphicElement('g', {'transform': mt([1, 0, 0, 1, 0.5 * (pl.x + pr.x), pt[s].y + da[o][s] * (d + 0.5 * fs)])}, parent);
+        textElement(fs, l, rc, gt);
     }else if(o == 'v'){
         if(!(s == 'l' || s == 'r')){throw 'Invalid side'};
         graphicElement(tg, {'points': [pt[s].x + da[o][s] * d, pu.y, pu.x, pu.y], 'class': 'dimline'}, parent);
@@ -84,6 +86,7 @@ function drawDim(pi, pj, o, s, d, l, parent){
         graphicElement(tg, {'points': [pt[s].x + da[o][s] * (d - 1.5), pu.y, pl.x + da[o][s] * (d - 1.5), pb.y], 'class': 'dimline'}, parent);
         graphicElement(tg, {'points': ar, 'class': 'dimarrow', 'transform': mt([0, 1, da[o][s], 0, pl.x + da[o][s] * d, pb.y])}, parent);
         graphicElement(tg, {'points': ar, 'class': 'dimarrow', 'transform': mt([0, -1, da[o][s], 0, pr.x + da[o][s] * d, pu.y])}, parent);
-        gt.setAttribute('transform', mt([1, 0, 0, 1, pr.x + da[o][s] * (d + 0.5 * rc), 0.5 * (pb.y + pu.y)]));
+        const gt = graphicElement('g', {'transform': mt([1, 0, 0, 1, pr.x + da[o][s] * (d + 0.5 * rc), 0.5 * (pb.y + pu.y)])}, parent);
+        textElement(fs, l, rc, gt);
     };
 };
