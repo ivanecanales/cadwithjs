@@ -80,6 +80,7 @@ function drawDim(pi, pj, o, s, d, l, parent){
             graphicElement(tg, {'points': ar[o], 'class': 'dimarrow', 'transform': mt([-1, 0, 0, 1, pr.x, pl.y - d])}, gr);
             gt.setAttribute('transform', mt([1, 0, 0, 1, 0.5 * (pl.x + pr.x), pb.y - d - 0.5 * fs]));
         }else if(s == 'u'){
+            console.log(pl, pr, pb, pu);
             graphicElement(tg, {'points': [pl.x, pl.y, pl.x, pu.y + d], 'class': 'dimline'}, gr);
             graphicElement(tg, {'points': [pr.x, pr.y, pr.x, pu.y + d], 'class': 'dimline'}, gr);
             graphicElement(tg, {'points': [pl.x, pu.y + d - 1.5, pr.x, pu.y + d - 1.5], 'class': 'dimline'}, gr);
