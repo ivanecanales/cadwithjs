@@ -98,7 +98,7 @@ function drawDim(pi, pj, o, s, d, l, parent){
         graphicElement(tg, {'points': [pt[s].x + da[o][s] * (d - 1.5), pu.y, pt[s].x + da[o][s] * (d - 1.5), pb.y], 'class': 'dimline'}, parent);
         graphicElement(tg, {'points': ar, 'class': 'dimarrow', 'transform': mt([0, 1, da[o][s], 0, pt[s].x + da[o][s] * d, pb.y])}, parent);
         graphicElement(tg, {'points': ar, 'class': 'dimarrow', 'transform': mt([0, -1, da[o][s], 0, pt[s].x + da[o][s] * d, pu.y])}, parent);
-        const gt = graphicElement('g', {'transform': mt([1, 0, 0, 1, pr.x + da[o][s] * (d + 0.5 * rc), 0.5 * (pb.y + pu.y)])}, parent);
+        const gt = graphicElement('g', {'transform': mt([1, 0, 0, 1, pt[s].x + da[o][s] * (d + 0.5 * rc), 0.5 * (pb.y + pu.y)])}, parent);
         textElement(fs, l, rc, gt);
     };
 };
