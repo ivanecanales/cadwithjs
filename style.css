@@ -1,9 +1,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 html{
-    --paper-color: beige;
-    --part-color: springgreen;
-    --dim-color: navy;
+    --paper-color: lavender;
+    --part-color: indianred;
+    --dim-color: teal;
+    --outline-color: black;
 }
 body{
     border: solid black 1px;
@@ -32,7 +33,7 @@ svg{
     fill: var(--dim-color);
 }
 .part{
-    stroke: black;
+    stroke: var(--outline-color);
     stroke-width: 1;
     fill: var(--part-color);
 }
