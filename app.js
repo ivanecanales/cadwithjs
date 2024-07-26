@@ -29,7 +29,7 @@ function setPaperSize(dwgw, dwgh, margin){
     document.head.appendChild(style);
 };
 function createDwg(minx, miny, dwgw, dwgh){
-    return graphicElement(
+    const dwg = graphicElement(
         'svg',
         {
             'viewBox': [minx, miny, dwgw, dwgh],
@@ -39,12 +39,32 @@ function createDwg(minx, miny, dwgw, dwgh){
         },
         document.body
     );
+    const ar = graphicElement(
+        'marker',
+        {
+            'id': 'arrowhead',
+            'viewBox': '-4 -2 4 4',
+            'markerWidth': 3,
+            'markerHeight': 3,
+            'orient': 'auto-start-reverse',
+            'markerUnits': 'userSpaceOnUse'
+        },
+        dwg
+    );
+    graphicElement('path', {'d': 'M -4 -2 L 0 0 L -4 2 z', 'class': 'dimarrow'}, ar);
+    return dwg;
 };
 class P{
     constructor(x, y){
         this.x = x;
         this.y = y;
     };
+    scale(a){return new P(a * this.x, a * this.y)};
+    get unit(){return this.scale(1 / this.norm)};
+    get norm(){return Math.sqrt(this.x ** 2 + this.y ** 2)};
+    get perp(){return new P(-this.y, this.x)};
+    static sub(v, w){return new P(v.x - w.x, v.y - w.y)};
+    static distance(v, w){return P.sub(v, w).norm};
 };
 function pointsToCoords(points){
     const coords = [];
@@ -71,22 +91,9 @@ function textElement(fontSize, dimension, rectLength, parent){
     );
 };
 function drawDim(pi, pj, s, d, l, parent){
-    const p = (x, y) => {return new P(x, y)};
-    const ar = graphicElement(
-        'marker',
-        {
-            'id': 'arrowhead',
-            'viewBox': '-4 -2 4 4',
-            'markerWidth': 3,
-            'markerHeight': 3,
-            'orient': 'auto-start-reverse',
-            'markerUnits': 'userSpaceOnUse'
-        },
-        parent
-    );
-    graphicElement('path', {'d': 'M -4 -2 L 0 0 L -4 2 z', 'class': 'dimarrow'}, ar);
     if(pi.x == pj.x && pi.y == pj.y){throw 'No dimension between two equal points'};
     if(!['b', 'u', 'l', 'r'].includes(s)){throw 'Invalid side'};
+    const p = (x, y) => {return new P(x, y)};
     let pb, pu, pl, pr, o;
     if(pi.x < pj.x){pl = pi; pr = pj}else if(pi.x > pj.x){pl = pj; pr = pi}else{if(pi.y < pj.y){pl = pi; pr = pj}else{pl = pj; pr = pi}};
     if(pi.y < pj.y){pb = pi; pu = pj}else if(pi.y > pj.y){pb = pj; pu = pi}else{if(pi.x < pj.x){pb = pi; pu = pj}else{pb = pj; pu = pi}};
@@ -97,7 +104,6 @@ function drawDim(pi, pj, s, d, l, parent){
         'a': {'b': p(pr.x, pl.y), 'u': p(pl.x, pr.y), 'l': p(pl.x, pr.y), 'r': p(pr.x, pl.y)},
         'd': {'b': p(pl.x, pr.y), 'u': p(pr.x, pl.y), 'l': p(pl.x, pr.y), 'r': p(pr.x, pl.y)}
     };
-    console.log(o); console.log(c[s], f[s], pr)
     const z = v[o]; const g = d - 1.5;
     const x = {'b': 0, 'u': 0, 'l': -1, 'r': 1};
     const y = {'b': -1, 'u': 1, 'l': 0, 'r': 0};
@@ -123,5 +129,34 @@ function drawDim(pi, pj, s, d, l, parent){
         'class': 'dimline'
     }, parent);
     const tg = graphicElement('g', {'transform': `translate(${t[s]})`}, parent);
+    textElement(fs, l, rc, tg);
+};
+function drawDimAlong(pi, pj, s, d, l, parent){
+    if(pi.x == pj.x && pi.y == pj.y){throw 'No dimension between two equal points'};
+    if(!['b', 'u'].includes(s)){throw 'Invalid side'};
+    const p = (x, y) => {return new P(x, y)}; const m = (p, q, c) => {return `matrix(${[p.x, p.y, q.x, q.y, c.x, c.y]})`}
+    let pl, pr;
+    if(pi.x < pj.x){pl = pi; pr = pj}else if(pi.x > pj.x){pl = pj; pr = pi}else{if(pi.y < pj.y){pl = pi; pr = pj}else{pl = pj; pr = pi}};
+    const i = P.sub(pr, pl).unit;
+    const j = i.perp;
+    const gg = graphicElement('g', {'transform': m(i, j, pl)}, parent);
+    const y = {'b': -1, 'u': 1}; const x = P.distance(pl, pr);
+    const fs = 5; const rc = 0.5 * fs * l.toString().length;
+    const t = `translate(${[0.5 * x, y[s] * (d + 0.5 * fs)]})`;
+    graphicElement('polyline', {
+        'points': [0, 0, 0, y[s] * d],
+        'class': 'dimline',
+        }, gg);
+    graphicElement('polyline', {
+        'points': [x, 0, x, y[s] * d],
+        'class': 'dimline',
+    }, gg);
+    graphicElement('polyline', {
+        'points': [0, y[s] * (d - 1.5), x, y[s] * (d - 1.5)],
+        'marker-start': 'url(#arrowhead)',
+        'marker-end': 'url(#arrowhead)',
+        'class': 'dimline',
+    }, gg);
+    const tg = graphicElement('g', {'transform': t}, gg);
     textElement(fs, l, rc, tg);
 };
