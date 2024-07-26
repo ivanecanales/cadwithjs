@@ -77,9 +77,10 @@ function drawDim(pi, pj, s, d, l, parent){
         {
             'id': 'arrowhead',
             'viewBox': '-4 -2 4 4',
-            'markerWidth': 4,
-            'markerHeight': 4,
-            'orient': 'auto-start-reverse'
+            'markerWidth': 3,
+            'markerHeight': 3,
+            'orient': 'auto-start-reverse',
+            'markerUnits': 'userSpaceOnUse'
         },
         parent
     );
