@@ -14,7 +14,7 @@ graphicElement(
     dwg
 );
 
-const pi = new Point(20, 70);
-const pj = new Point(80, 50);
+const pi = new Point(50, 30);
+const pj = new Point(50, 70);
 
-drawDim(pi, pj, 'v', 'r', 10, 40, dwg);
+drawDim(pi, pj, 'r', 10, 40, dwg);

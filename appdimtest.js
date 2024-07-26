@@ -70,32 +70,6 @@ function textElement(fontSize, dimension, rectLength, parent){
         dimension
     );
 };
-function drawDim(pi, pj, o, s, d, l, parent){
-    const mt = matrix => {return `matrix(${matrix})`};
-    const tg = 'polyline';
-    let pl, pr; if(pi.x <= pj.x){pl = pi; pr = pj}else{pl = pj; pr = pi};
-    let pb, pu; if(pi.y <= pj.y){pb = pi; pu = pj}else{pb = pj; pu = pi};
-    let v; if(pl.y <= pr.y){v = 'h'}else{v = 'v'};
-    const pc = {'b': pb, 'u': pu, 'l': pl, 'r': pr};
-    const pf = {'b': pu, 'u': pb, 'l': pr, 'r': pl};
-    const ps = {'b': pl, 'u': pl, 'l': pb, 'r': pb};
-    const pe = {'b': pr, 'u': pr, 'l': pu, 'r': pu};
-    const pv = {
-        'h': {'b': 0, 'u': 0, 'l': 0, 'r': 0},
-        'v': {'b': 0, 'u': 0, 'l': 0, 'r': 0}
-    };
-
-    graphicElement('circle', {'r': 6, 'cx': pc[s].x, 'cy': pc[s].y, 'fill': 'yellow'}, parent);
-    graphicElement('circle', {'r': 6, 'cx': pf[s].x, 'cy': pf[s].y, 'fill': 'crimson'}, parent);
-
-    graphicElement('circle', {'r': 4, 'cx': ps[s].x, 'cy': ps[s].y, 'fill': 'orange'}, parent);
-    graphicElement('circle', {'r': 4, 'cx': pe[s].x, 'cy': pe[s].y, 'fill': 'pink'}, parent);
-
+function drawDim(pi, pj, s, d, l, parent){
     
-    
-    const ar = [3, 0, 3, -3, 0, -1.5, 3, 0];    
-    const fs = 5;
-    const rc = 0.5 * fs * l.toString().length;
-
-
 };
