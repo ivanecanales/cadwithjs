@@ -40,7 +40,7 @@ function createDwg(minx, miny, dwgw, dwgh){
         document.body
     );
 };
-class Point{
+class P{
     constructor(x, y){
         this.x = x;
         this.y = y;
@@ -49,7 +49,7 @@ class Point{
 function pointsToCoords(points){
     const coords = [];
     for(let i = 0; i < points.length; i += 2){
-        coords.push(new Point(points[i], points[i + 1]));
+        coords.push(new P(points[i], points[i + 1]));
     };
     return coords;
 };
@@ -70,35 +70,57 @@ function textElement(fontSize, dimension, rectLength, parent){
         dimension
     );
 };
-function drawDim(pi, pj, o, s, d, l, parent){
-    const mt = matrix => {return `matrix(${matrix})`};
-    const tg = 'polyline';
-    const pl = pi.x <= pj.x ? pi : pj;
-    const pr = pi.x <= pj.x ? pj : pi;
-    const pb = pi.y <= pj.y ? pi : pj;
-    const pu = pi.y <= pj.y ? pj : pi;
-    const ar = [3, 0, 3, -3, 0, -1.5, 3, 0];    
-    const da = {'h': {'b': -1, 'u': 1}, 'v': {'l': -1, 'r': 1}}
-    const pt = {'u': pu, 'b': pb, 'l': pl, 'r': pr};
-    const fs = 5;
-    const rc = 0.5 * fs * l.toString().length;
-    if(o == 'h'){
-        if(!(s == 'b' || s == 'u')){throw 'Invalid side'};
-        graphicElement(tg, {'points': [pl.x, pl.y, pl.x, pt[s].y + da[o][s] * d], 'class': 'dimline'}, parent);
-        graphicElement(tg, {'points': [pr.x, pr.y, pr.x, pt[s].y + da[o][s] * d], 'class': 'dimline'}, parent);
-        graphicElement(tg, {'points': [pl.x, pt[s].y + da[o][s] * (d - 1.5), pr.x, pt[s].y + da[o][s] * (d - 1.5)], 'class': 'dimline'}, parent);
-        graphicElement(tg, {'points': ar, 'class': 'dimarrow', 'transform': mt([1, 0, 0, da[o][s], pl.x, pt[s].y + da[o][s] * d])}, parent);
-        graphicElement(tg, {'points': ar, 'class': 'dimarrow', 'transform': mt([-1, 0, 0, da[o][s], pr.x, pt[s].y + da[o][s] * d])}, parent);
-        const gt = graphicElement('g', {'transform': mt([1, 0, 0, 1, 0.5 * (pl.x + pr.x), pt[s].y + da[o][s] * (d + 0.5 * fs)])}, parent);
-        textElement(fs, l, rc, gt);
-    }else if(o == 'v'){
-        if(!(s == 'l' || s == 'r')){throw 'Invalid side'};
-        graphicElement(tg, {'points': [pt[s].x + da[o][s] * d, pu.y, pu.x, pu.y], 'class': 'dimline'}, parent);
-        graphicElement(tg, {'points': [pt[s].x + da[o][s] * d, pb.y, pb.x, pb.y], 'class': 'dimline'}, parent);
-        graphicElement(tg, {'points': [pt[s].x + da[o][s] * (d - 1.5), pu.y, pt[s].x + da[o][s] * (d - 1.5), pb.y], 'class': 'dimline'}, parent);
-        graphicElement(tg, {'points': ar, 'class': 'dimarrow', 'transform': mt([0, 1, da[o][s], 0, pt[s].x + da[o][s] * d, pb.y])}, parent);
-        graphicElement(tg, {'points': ar, 'class': 'dimarrow', 'transform': mt([0, -1, da[o][s], 0, pt[s].x + da[o][s] * d, pu.y])}, parent);
-        const gt = graphicElement('g', {'transform': mt([1, 0, 0, 1, pt[s].x + da[o][s] * (d + 0.5 * rc), 0.5 * (pb.y + pu.y)])}, parent);
-        textElement(fs, l, rc, gt);
+function drawDim(pi, pj, s, d, l, parent){
+    const p = (x, y) => {return new P(x, y)};
+    const ar = graphicElement(
+        'marker',
+        {
+            'id': 'arrowhead',
+            'viewBox': '-4 -2 4 4',
+            'markerWidth': 4,
+            'markerHeight': 4,
+            'orient': 'auto-start-reverse'
+        },
+        parent
+    );
+    graphicElement('path', {'d': 'M -4 -2 L 0 0 L -4 2 z', 'class': 'dimarrow'}, ar);
+    if(pi.x == pj.x && pi.y == pj.y){throw 'No dimension between two equal points'};
+    if(!['b', 'u', 'l', 'r'].includes(s)){throw 'Invalid side'};
+    let pb, pu, pl, pr, o;
+    if(pi.x < pj.x){pl = pi; pr = pj}else if(pi.x > pj.x){pl = pj; pr = pi}else{if(pi.y < pj.y){pl = pi; pr = pj}else{pl = pj; pr = pi}};
+    if(pi.y < pj.y){pb = pi; pu = pj}else if(pi.y > pj.y){pb = pj; pu = pi}else{if(pi.x < pj.x){pb = pi; pu = pj}else{pb = pj; pu = pi}};
+    if(pl.y <= pr.y){o = 'a'}else{o = 'd'};
+    const c = {'b': pb, 'u': pu, 'l': pl, 'r': pr};
+    const f = {'b': pu, 'u': pb, 'l': pr, 'r': pl};
+    const v = {
+        'a': {'b': p(pr.x, pl.y), 'u': p(pl.x, pr.y), 'l': p(pl.x, pr.y), 'r': p(pr.x, pl.y)},
+        'd': {'b': p(pl.x, pr.y), 'u': p(pr.x, pl.y), 'l': p(pl.x, pr.y), 'r': p(pr.x, pl.y)}
     };
+    console.log(o); console.log(c[s], f[s], pr)
+    const z = v[o]; const g = d - 1.5;
+    const x = {'b': 0, 'u': 0, 'l': -1, 'r': 1};
+    const y = {'b': -1, 'u': 1, 'l': 0, 'r': 0};
+    const fs = 5; const rc = 0.5 * fs * l.toString().length;
+    const t = {
+        'b': [0.5 * (pl.x + pr.x), pb.y + y[s] * (d + 0.5 * fs)],
+        'u': [0.5 * (pl.x + pr.x), pu.y + y[s] * (d + 0.5 * fs)],
+        'l': [pl.x + x[s] * (d + 0.5 * rc), 0.5 * (pb.y + pu.y)],
+        'r': [pr.x + x[s] * (d + 0.5 * rc), 0.5 * (pb.y + pu.y)]
+    };
+    graphicElement('polyline', {
+        'points': [c[s].x, c[s].y, c[s].x + x[s] * d, c[s].y + y[s] * d],
+        'class': 'dimline'
+    }, parent);
+    graphicElement('polyline', {
+        'points': [f[s].x, f[s].y, z[s].x + x[s] * d, z[s].y + y[s] * d],
+        'class': 'dimline'
+    }, parent);
+    graphicElement('polyline', {
+        'points': [c[s].x + x[s] * g, c[s].y + y[s] * g, z[s].x + x[s] * g, z[s].y + y[s] * g],
+        'marker-start': 'url(#arrowhead)',
+        'marker-end': 'url(#arrowhead)',
+        'class': 'dimline'
+    }, parent);
+    const tg = graphicElement('g', {'transform': `translate(${t[s]})`}, parent);
+    textElement(fs, l, rc, tg);
 };
