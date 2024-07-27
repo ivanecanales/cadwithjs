@@ -4,14 +4,19 @@
 	<title>CadWithJs Index</title>
     </head>
     <body>
-        <ol>
-            <li><a href="cadhtml/cwjs001.html">001</a></li>
-            <li><a href="cadhtml/cwjs002.html">002</a></li>
-            <li><a href="cadhtml/cwjs003.html">003</a></li>
-            <li><a href="cadhtml/cwjs004.html">004</a></li>
-            <li><a href="cadhtml/cwjs005.html">005</a></li>
-            <li><a href="cadhtml/cwjs006.html">006</a></li>
-            <li><a href="cadhtml/cwjs007.html">007</a></li>
-        </ol>
+        <script>
+            const day = 9;
+            const ol = document.createElement('ol');
+            document.body.append(ol);
+            for(let i = 1; i <= day; i++){
+                const li = document.createElement('li');
+                const an = document.createElement('a');
+                const id = i.toString().padStart(3, '0');
+                an.innerHTML = id;
+                an.setAttribute('href', `cadhtml/cwjs${id}.html`)
+                li.appendChild(an);
+                ol.appendChild(li);
+            };
+        </script>
     </body>
 </html>

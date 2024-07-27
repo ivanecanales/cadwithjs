@@ -1,12 +1,14 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 html{
-    --paper-color: lavender;
-    --part-color: indianred;
-    --dim-color: teal;
+    background: white;
+    --paper-color: white;
+    --part-color: lightgreen;
+    --dim-color: black;
     --outline-color: black;
 }
 body{
+    background: lightblue;
     border: solid black 1px;
     display: flex;
     align-items: center;
