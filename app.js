@@ -63,8 +63,11 @@ class P{
     get unit(){return this.scale(1 / this.norm)};
     get norm(){return Math.sqrt(this.x ** 2 + this.y ** 2)};
     get perp(){return new P(-this.y, this.x)};
+    get angle(){const a = Math.atan2(this.y, this.x); if(a < 0){return a + 2 * Math.PI}else{return a}};
     static sub(v, w){return new P(v.x - w.x, v.y - w.y)};
+    static add(v, w){return new P(v.x + w.x, v.y + w.y)};
     static distance(v, w){return P.sub(v, w).norm};
+    static angleBetween(v, w){const a = w.angle - v.angle; if(a < 0){return a + 2 * Math.PI}else{return a}};
 };
 function pointsToCoords(points){
     const coords = [];
@@ -74,7 +77,7 @@ function pointsToCoords(points){
     return coords;
 };
 function textElement(fontSize, dimension, rectLength, parent){
-    graphicElement(
+    return graphicElement(
         'text',
         {
             'x': -0.5 * rectLength,
@@ -159,4 +162,27 @@ function drawDimAlong(pi, pj, s, d, l, parent){
     }, gg);
     const tg = graphicElement('g', {'transform': t}, gg);
     textElement(fs, l, rc, tg);
+};
+function drawDimAngle(c, pi, pj, d, l, parent){
+    const si = P.add(P.sub(pi, c).unit.scale(d), c);
+    const sj = P.add(P.sub(pj, c).unit.scale(d), c);
+    const ti = P.sub(pi, c).unit;
+    const tj = P.sub(pj, c).unit;
+    const an = P.angleBetween(ti, tj);
+    const lf = an < Math.PI ? 0 : 1;
+    graphicElement(
+        'path',
+        {
+            'd': `M ${[si.x, si.y]} A ${[d, d, 0]} ${lf} 1 ${[sj.x, sj.y]}`,
+            'marker-start': 'url(#arrowhead)',
+            'marker-end': 'url(#arrowhead)',
+            'class': 'dimline'
+        },
+        parent
+    );
+    const fs = 5; const rc = 0.5 * fs * l.toString().length;
+    const x = c.x + (d + 0.6 * rc) * Math.cos(ti.angle + 0.5 * an);
+    const y = c.y + (d + 0.6 * fs) * Math.sin(ti.angle + 0.5 * an);
+    const gt = graphicElement('g', {'transform': `translate(${[x, y]})`}, parent)
+    textElement(fs, l, rc, gt);
 };

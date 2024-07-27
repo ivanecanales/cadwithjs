@@ -24,6 +24,7 @@ svg{
 .dimline{
     stroke-width: 0.5;
     stroke: var(--dim-color);
+    fill: none;
 }
 .dimarrow{
     fill: var(--dim-color);
