@@ -60,8 +60,8 @@ class P{
         this.y = y;
     };
     scale(a){return new P(a * this.x, a * this.y)};
-    get unit(){return this.scale(1 / this.norm)};
     get norm(){return Math.sqrt(this.x ** 2 + this.y ** 2)};
+    get unit(){return this.scale(1 / this.norm)};
     get perp(){return new P(-this.y, this.x)};
     get angle(){const a = Math.atan2(this.y, this.x); if(a < 0){return a + 2 * Math.PI}else{return a}};
     static sub(v, w){return new P(v.x - w.x, v.y - w.y)};
@@ -165,10 +165,10 @@ function drawDimAlong(pi, pj, s, d, l, parent){
     textElement(fs, l, rc, tg);
 };
 function drawDimAngle(c, pi, pj, d, l, parent){
-    const si = P.add(P.sub(pi, c).unit.scale(d), c);
-    const sj = P.add(P.sub(pj, c).unit.scale(d), c);
     const ti = P.sub(pi, c).unit;
     const tj = P.sub(pj, c).unit;
+    const si = P.add(ti.scale(d), c);
+    const sj = P.add(tj.scale(d), c);
     const an = P.angleBetween(ti, tj);
     const lf = an < Math.PI ? 0 : 1;
     graphicElement(
@@ -187,6 +187,7 @@ function drawDimAngle(c, pi, pj, d, l, parent){
     const gt = graphicElement('g', {'transform': `translate(${[x, y]})`}, parent)
     textElement(fs, l, rc, gt);
 };
+<<<<<<< HEAD
 function drawSymetryLine(points, parent){
     return graphicElement(
         'polyline',
@@ -197,3 +198,5 @@ function drawSymetryLine(points, parent){
         parent
     )
 }
+=======
+>>>>>>> a54fed6e43c2bd48370f469a0b85bebc0ad77fa8
