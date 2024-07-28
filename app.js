@@ -187,7 +187,6 @@ function drawDimAngle(c, pi, pj, d, l, parent){
     const gt = graphicElement('g', {'transform': `translate(${[x, y]})`}, parent)
     textElement(fs, l, rc, gt);
 };
-<<<<<<< HEAD
 function drawSymetryLine(points, parent){
     return graphicElement(
         'polyline',
@@ -196,7 +195,5 @@ function drawSymetryLine(points, parent){
             'class': 'symmetry',
         },
         parent
-    )
-}
-=======
->>>>>>> a54fed6e43c2bd48370f469a0b85bebc0ad77fa8
+    );
+};
