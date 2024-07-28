@@ -68,6 +68,7 @@ class P{
     static add(v, w){return new P(v.x + w.x, v.y + w.y)};
     static distance(v, w){return P.sub(v, w).norm};
     static angleBetween(v, w){const a = w.angle - v.angle; if(a < 0){return a + 2 * Math.PI}else{return a}};
+    static polar(r, a){return new P(r * Math.cos(a), r * Math.sin(a))};
 };
 function pointsToCoords(points){
     const coords = [];
@@ -186,3 +187,13 @@ function drawDimAngle(c, pi, pj, d, l, parent){
     const gt = graphicElement('g', {'transform': `translate(${[x, y]})`}, parent)
     textElement(fs, l, rc, gt);
 };
+function drawSymetryLine(points, parent){
+    return graphicElement(
+        'polyline',
+        {  
+            'points': points,
+            'class': 'symmetry',
+        },
+        parent
+    )
+}

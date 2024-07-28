@@ -6,6 +6,7 @@ html{
     --part-color: lightgreen;
     --dim-color: black;
     --outline-color: black;
+    --symmetry-color: black;
 }
 body{
     background: lightblue;
@@ -39,6 +40,11 @@ svg{
     stroke: var(--outline-color);
     stroke-width: 1;
     fill: var(--part-color);
+}
+.symmetry{
+    stroke-dasharray: 4 2 1 2;
+    stroke: var(--symmetry-color);
+    stroke-width: 0.5;
 }
 @media print{
     body{
