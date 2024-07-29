@@ -11,7 +11,7 @@
             for(let i = 1; i <= day; i++){
                 const li = document.createElement('li');
                 const an = document.createElement('a');
-                const id = i.toString().padStart(3, '0');
+                const id = i.toString().padStart(2, '0');
                 an.innerHTML = id;
                 an.setAttribute('href', `cadhtml/cwjs${id}.html`)
                 li.appendChild(an);
