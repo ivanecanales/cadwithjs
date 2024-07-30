@@ -59,16 +59,46 @@ class P{
         this.x = x;
         this.y = y;
     };
-    scale(a){return new P(a * this.x, a * this.y)};
-    get norm(){return Math.sqrt(this.x ** 2 + this.y ** 2)};
-    get unit(){return this.scale(1 / this.norm)};
-    get perp(){return new P(-this.y, this.x)};
-    get angle(){const a = Math.atan2(this.y, this.x); if(a < 0){return a + 2 * Math.PI}else{return a}};
-    static sub(v, w){return new P(v.x - w.x, v.y - w.y)};
-    static add(v, w){return new P(v.x + w.x, v.y + w.y)};
-    static distance(v, w){return P.sub(v, w).norm};
-    static angleBetween(v, w){const a = w.angle - v.angle; if(a < 0){return a + 2 * Math.PI}else{return a}};
-    static polar(r, a){return new P(r * Math.cos(a), r * Math.sin(a))};
+    scale(a){
+        return new P(a * this.x, a * this.y);
+    };
+    get norm(){
+        return Math.sqrt(this.x ** 2 + this.y ** 2)
+    };
+    get unit(){
+        return this.scale(1 / this.norm);
+    };
+    get perp(){
+        return new P(-this.y, this.x);
+    };
+    get angle(){
+        const a = Math.atan2(this.y, this.x);
+        if(a < 0){
+            return a + 2 * Math.PI;
+        }else{
+            return a;
+        };
+    };
+    static sub(v, w){
+        return new P(v.x - w.x, v.y - w.y);
+    };
+    static add(v, w){
+        return new P(v.x + w.x, v.y + w.y);
+    };
+    static distance(v, w){
+        return P.sub(v, w).norm;
+    };
+    static angleBetween(v, w){
+        const a = w.angle - v.angle;
+        if(a < 0){
+            return a + 2 * Math.PI;
+        }else{
+            return a;
+        };
+    };
+    static polar(r, a){
+        return new P(r * Math.cos(a), r * Math.sin(a));
+    };
 };
 function pointsToCoords(points){
     const coords = [];
@@ -95,13 +125,37 @@ function textElement(fontSize, dimension, rectLength, parent){
     );
 };
 function drawDim(pi, pj, s, d, l, parent){
-    if(pi.x == pj.x && pi.y == pj.y){throw 'No dimension between two equal points'};
-    if(!['b', 'u', 'l', 'r'].includes(s)){throw 'Invalid side'};
+    if(pi.x == pj.x && pi.y == pj.y){
+        throw 'No dimension between two equal points'
+    };
+    if(!['b', 'u', 'l', 'r'].includes(s)){
+        throw 'Invalid side'
+    };
     const p = (x, y) => {return new P(x, y)};
-    let pb, pu, pl, pr, o;
-    if(pi.x < pj.x){pl = pi; pr = pj}else if(pi.x > pj.x){pl = pj; pr = pi}else{if(pi.y < pj.y){pl = pi; pr = pj}else{pl = pj; pr = pi}};
-    if(pi.y < pj.y){pb = pi; pu = pj}else if(pi.y > pj.y){pb = pj; pu = pi}else{if(pi.x < pj.x){pb = pi; pu = pj}else{pb = pj; pu = pi}};
-    if(pl.y <= pr.y){o = 'a'}else{o = 'd'};
+    let pb, pu, pl, pr;
+    if(pi.x < pj.x){
+        pl = pi; pr = pj;
+    }else if(pi.x > pj.x){
+        pl = pj; pr = pi;
+    }else{
+        if(pi.y < pj.y){
+            pl = pi; pr = pj;
+        }else{
+            pl = pj; pr = pi;
+        };
+    };
+    if(pi.y < pj.y){
+        pb = pi; pu = pj;
+    }else if(pi.y > pj.y){
+        pb = pj; pu = pi;
+    }else{
+        if(pi.x < pj.x){
+            pb = pi; pu = pj;
+        }else{
+            pb = pj; pu = pi;
+        };
+    };
+    const o = pl.y <= pr.y ? 'a' : 'd';
     const c = {'b': pb, 'u': pu, 'l': pl, 'r': pr};
     const f = {'b': pu, 'u': pb, 'l': pr, 'r': pl};
     const v = {
@@ -136,32 +190,94 @@ function drawDim(pi, pj, s, d, l, parent){
     textElement(fs, l, rc, tg);
 };
 function drawDimAlong(pi, pj, s, d, l, parent){
-    if(pi.x == pj.x && pi.y == pj.y){throw 'No dimension between two equal points'};
-    if(!['b', 'u'].includes(s)){throw 'Invalid side'};
-    const p = (x, y) => {return new P(x, y)}; const m = (p, q, c) => {return `matrix(${[p.x, p.y, q.x, q.y, c.x, c.y]})`}
+    if(pi.x == pj.x && pi.y == pj.y){
+        throw 'No dimension between two equal points';
+    };
+    if(!['b', 'u'].includes(s)){
+        throw 'Invalid side';
+    };
+    const m = (i, j, c) => { return `matrix(${[i.x, i.y, j.x, j.y, c.x, c.y]})`; }
     let pl, pr;
-    if(pi.x < pj.x){pl = pi; pr = pj}else if(pi.x > pj.x){pl = pj; pr = pi}else{if(pi.y < pj.y){pl = pi; pr = pj}else{pl = pj; pr = pi}};
+    if(pi.x < pj.x){
+        pl = pi; pr = pj;
+    }else if(pi.x > pj.x){
+        pl = pj; pr = pi;
+    }else{
+        if(pi.y < pj.y){
+            pl = pi; pr = pj;
+        }else{
+            pl = pj; pr = pi;
+        };
+    };
     const i = P.sub(pr, pl).unit;
     const j = i.perp;
-    const gg = graphicElement('g', {'transform': m(i, j, pl)}, parent);
+    const g = graphicElement('g', {'transform': m(i, j, pl)}, parent);
     const y = {'b': -1, 'u': 1}; const x = P.distance(pl, pr);
     const fs = 5; const rc = 0.5 * fs * l.toString().length;
     const t = `translate(${[0.5 * x, y[s] * (d + 0.5 * fs)]})`;
     graphicElement('polyline', {
         'points': [0, 0, 0, y[s] * d],
         'class': 'dimline',
-        }, gg);
+        }, g);
     graphicElement('polyline', {
         'points': [x, 0, x, y[s] * d],
         'class': 'dimline',
-    }, gg);
+    }, g);
     graphicElement('polyline', {
         'points': [0, y[s] * (d - 1.5), x, y[s] * (d - 1.5)],
         'marker-start': 'url(#arrowhead)',
         'marker-end': 'url(#arrowhead)',
         'class': 'dimline',
-    }, gg);
-    const tg = graphicElement('g', {'transform': t}, gg);
+    }, g);
+    const tg = graphicElement('g', {'transform': t}, g);
+    textElement(fs, l, rc, tg);
+};
+function drawDimOuter(pi, pj, s, d, l, a, b, parent){
+    if(pi.x == pj.x && pi.y == pj.y){
+        throw 'No dimension between two equal points';
+    };
+    if(!['b', 'u'].includes(s)){
+        throw 'Invalid side';
+    };
+    const m = (i, j, c) => { return `matrix(${[i.x, i.y, j.x, j.y, c.x, c.y]})`; }
+    let pl, pr;
+    if(pi.x < pj.x){
+        pl = pi; pr = pj;
+    }else if(pi.x > pj.x){
+        pl = pj; pr = pi;
+    }else{
+        if(pi.y < pj.y){
+            pl = pi; pr = pj;
+        }else{
+            pl = pj; pr = pi;
+        };
+    };
+    const i = P.sub(pr, pl).unit;
+    const j = i.perp;
+    const g = graphicElement('g', {'transform': m(i, j, pl)}, parent);
+    const y = {'b': -1, 'u': 1}; const x = P.distance(pl, pr);
+    const fs = 5; const rc = 0.5 * fs * l.toString().length;
+    const dx = b == -1 ? - a - 0.5 * rc : x + a + 0.5 * rc;
+    const t = `translate(${[dx, y[s] * (d - 1.5)]})`;
+    graphicElement('polyline', {
+        'points': [0, 0, 0, y[s] * d],
+        'class': 'dimline',
+        }, g);
+    graphicElement('polyline', {
+        'points': [x, 0, x, y[s] * d],
+        'class': 'dimline',
+    }, g);
+    graphicElement('polyline', {
+        'points': [-a, y[s] * (d - 1.5), 0, y[s] * (d - 1.5)],
+        'marker-end': 'url(#arrowhead)',
+        'class': 'dimline',
+    }, g);
+    graphicElement('polyline', {
+        'points': [x, y[s] * (d - 1.5), x + a, y[s] * (d - 1.5)],
+        'marker-end': 'url(#arrowhead)',
+        'class': 'dimline',
+    }, g);
+    const tg = graphicElement('g', {'transform': t}, g);
     textElement(fs, l, rc, tg);
 };
 function drawDimAngle(c, pi, pj, d, l, parent){
@@ -196,4 +312,65 @@ function drawSymetryLine(points, parent){
         },
         parent
     );
+};
+function drawDiamIn(c, d, a, l, parent){
+    const r = a / 180 * Math.PI;
+    const g = graphicElement(
+        'g',
+        {
+            'transform': `${[Math.cos(r), Math.sin(r), -Math.sin(r), Math.cos(r), c.x, c.y]}`
+        },
+        parent
+    );
+    const fs = 5; rc = 0.5 * rc * l.toString().length;
+    textElement(fs, l, rc, g);
+    graphicElement(
+        'polyline',
+        {
+            'points': [-0.5 * d, 0, -0.5 * rc, 0],
+            'marker-end': 'url(#arrowhead)',
+            'class': 'dimline'
+        },
+        g
+    );
+    graphicElement(
+        'polyline',
+        {
+            'points': [0.5 * d, 0, 0.5 * rc, 0],
+            'marker-end': 'url(#arrowhead)',
+            'class': 'dimline'
+        },
+        g
+    )
+};
+function drawDiamOut(c, d, a, s, l, t, parent){
+    const r = a / 180 * Math.PI;
+    const g = graphicElement(
+        'g',
+        {
+            'transform': `${[Math.cos(r), Math.sin(r), -Math.sin(r), Math.cos(r), c.x, c.y]}`
+        },
+        parent
+    );
+    graphicElement(
+        'polyline',
+        {
+            'points': [-0.5 * d - t, 0, -0.5 * d],
+            'marker-end': 'url(#arrowhead)',
+            'class': 'dimline'
+        },
+        g
+    );
+    graphicElement(
+        'polyline',
+        {
+            'points': [0.5 * d + t, 0, 0.5 * d],
+            'marker-end': 'url(#arrowhead)',
+            'class': 'dimline'
+        },
+        g
+    );
+    const fs = 5; const rc = 0.5 * fs * l.toString().length;
+    const gt = graphicElement('g', {'transform': `translate(${[s * (0.5 * (d + rc)), 0]})`}, parent);
+    textElement(fs, l, rc, gt);
 };
