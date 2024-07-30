@@ -41,6 +41,11 @@ svg{
     stroke-width: 1;
     fill: var(--part-color);
 }
+.perf{
+    stroke: var(--outline-color);
+    stroke-width: 1;
+    fill: var(--paper-color);
+}
 .symmetry{
     stroke-dasharray: 4 2 1 2;
     stroke: var(--symmetry-color);

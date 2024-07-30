@@ -273,7 +273,7 @@ function drawDimOuter(pi, pj, s, d, l, a, b, parent){
         'class': 'dimline',
     }, g);
     graphicElement('polyline', {
-        'points': [x, y[s] * (d - 1.5), x + a, y[s] * (d - 1.5)],
+        'points': [x + a, y[s] * (d - 1.5), x, y[s] * (d - 1.5)],
         'marker-end': 'url(#arrowhead)',
         'class': 'dimline',
     }, g);
@@ -348,14 +348,14 @@ function drawDiamOut(c, d, a, s, l, t, parent){
     const g = graphicElement(
         'g',
         {
-            'transform': `${[Math.cos(r), Math.sin(r), -Math.sin(r), Math.cos(r), c.x, c.y]}`
+            'transform': `matrix(${[Math.cos(r), Math.sin(r), -Math.sin(r), Math.cos(r), c.x, c.y]})`
         },
         parent
     );
     graphicElement(
         'polyline',
         {
-            'points': [-0.5 * d - t, 0, -0.5 * d],
+            'points': [-0.5 * d - t, 0, -0.5 * d, 0],
             'marker-end': 'url(#arrowhead)',
             'class': 'dimline'
         },
@@ -364,13 +364,13 @@ function drawDiamOut(c, d, a, s, l, t, parent){
     graphicElement(
         'polyline',
         {
-            'points': [0.5 * d + t, 0, 0.5 * d],
+            'points': [0.5 * d + t, 0, 0.5 * d, 0],
             'marker-end': 'url(#arrowhead)',
             'class': 'dimline'
         },
         g
     );
     const fs = 5; const rc = 0.5 * fs * l.toString().length;
-    const gt = graphicElement('g', {'transform': `translate(${[s * (0.5 * (d + rc)), 0]})`}, parent);
+    const gt = graphicElement('g', {'transform': `translate(${[s * (0.5 * d + 0.6*rc + t), 0]})`}, g);
     textElement(fs, l, rc, gt);
 };
