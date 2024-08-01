@@ -314,15 +314,18 @@ function drawSymetryLine(points, parent){
     );
 };
 function drawDiamIn(c, d, a, l, parent){
+    const m = (i, j, c) => { return `matrix(${[i.x, i.y, j.x, j.y, c.x, c.y]})`; }
     const r = a / 180 * Math.PI;
+    const p = new P(Math.cos(r), Math.sin(r));
+    const q = new P(-Math.sin(r), Math.cos(r));
     const g = graphicElement(
         'g',
         {
-            'transform': `${[Math.cos(r), Math.sin(r), -Math.sin(r), Math.cos(r), c.x, c.y]}`
+            'transform': m(p, q, c)
         },
         parent
     );
-    const fs = 5; rc = 0.5 * rc * l.toString().length;
+    const fs = 5; const rc = 0.5 * fs * l.toString().length;
     textElement(fs, l, rc, g);
     graphicElement(
         'polyline',
@@ -344,11 +347,14 @@ function drawDiamIn(c, d, a, l, parent){
     )
 };
 function drawDiamOut(c, d, a, s, l, t, parent){
+    const m = (i, j, c) => { return `matrix(${[i.x, i.y, j.x, j.y, c.x, c.y]})`; }
     const r = a / 180 * Math.PI;
+    const p = new P(Math.cos(r), Math.sin(r));
+    const q = new P(-Math.sin(r), Math.cos(r));
     const g = graphicElement(
         'g',
         {
-            'transform': `matrix(${[Math.cos(r), Math.sin(r), -Math.sin(r), Math.cos(r), c.x, c.y]})`
+            'transform': m(p, q, c)
         },
         parent
     );
@@ -373,4 +379,16 @@ function drawDiamOut(c, d, a, s, l, t, parent){
     const fs = 5; const rc = 0.5 * fs * l.toString().length;
     const gt = graphicElement('g', {'transform': `translate(${[s * (0.5 * d + 0.6*rc + t), 0]})`}, g);
     textElement(fs, l, rc, gt);
+};
+function drawPerf(c, d, parent){
+    graphicElement(
+        'circle',
+        {
+            'cx': c.x,
+            'cy': c.y,
+            'r': 0.5 * d,
+            'class': 'perf'
+        },
+        parent
+    );
 };

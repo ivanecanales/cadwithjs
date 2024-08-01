@@ -7,6 +7,8 @@ const dwg = createDwg(-20, -30, dwgw, dwgh);
 const absolutepoints = [0, 0, 40, 0, 40, 11, 35, 11, 30, 6, 30, 5, 10, 5, 10, 6, 5, 11, 0, 11, 0, 0];
 const points = []; absolutepoints.forEach(i => points.push(scale * i));
 const part = pointsToCoords(points);
+const [c1, d1] = [(new P(5, 6)).scale(scale), 4 * scale];
+const [c2, d2] = [(new P(35, 6)).scale(scale), 4 * scale];
 graphicElement(
     'polyline',
     {
@@ -15,30 +17,13 @@ graphicElement(
     },
     dwg
 );
+drawPerf(c1, d1, dwg);
+drawPerf(c2, d2, dwg);
 
-graphicElement(
-    'circle',
-    {
-        'r': 2 * scale,
-        'cx': 5 * scale,
-        'cy': 6 * scale,
-        'class': 'perf'
-    },
-    dwg
-);
-graphicElement(
-    'circle',
-    {
-        'r': 2 * scale,
-        'cx': 35 * scale,
-        'cy': 6 * scale,
-        'class': 'perf'
-    },
-    dwg
-);
+drawDiamOut(c1, d1, -30, 1, 'ϕ4', 7.5, dwg);
+drawDiamOut(c2, d2, 30, -1, 'ϕ4', 7.5, dwg);
+
 drawDimOuter(part[6], part[7], 'b', 15, 1, 7.5, 1, dwg);
-drawDiamOut(new P(5 * scale, 6 * scale), 4 * scale, -30, 1, 'ϕ4', 7.5, dwg);
-drawDiamOut(new P(35 * scale, 6 * scale), 4 * scale, 30, -1, 'ϕ4', 7.5, dwg);
 drawDimAlong(part[3], part[4], 'u', 10, 7, dwg);
 drawDimAlong(part[7], part[8], 'u', 10, 7, dwg);
 drawDim(part[2], part[3], 'u', 10, 5, dwg);
