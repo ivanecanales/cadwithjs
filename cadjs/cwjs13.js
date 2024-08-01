@@ -33,3 +33,18 @@ drawDim(c2, c4, 'b', 10 + 4 * scale, 11, dwg);
 drawDim(c4, c5, 'b', 10 + 4 * scale, 10, dwg);
 drawDim(c5, c6, 'b', 10 + 4 * scale, 7, dwg);
 drawDim(part[1], c6, 'b', 10, 8, dwg);
+
+drawDim(part[1], c5, 'r', 10, 4, dwg);
+drawDim(c4, c5, 'r', 10 + 15 * scale, 8, dwg);
+drawDim(c4, c6, 'r', 10 + 8 * scale, 11, dwg);
+drawDim(c3, c6, 'r', 10 + 8 * scale, 10, dwg);
+drawDim(part[2], c3, 'r', 10, 11, dwg);
+
+//drawDiamOut(c, d, a, s, l, t, parent)
+
+drawDiamOut(c1, d1, 20, 1, 'ϕ8', 5, dwg);
+drawDiamOut(c2, d2, 0, -1, 'ϕ3', 5, dwg);
+drawDiamOut(c3, d3, -20, 1, 'ϕ13', 5, dwg);
+drawDiamOut(c4, d4, 20, 1, 'ϕ13', 5, dwg);
+drawDiamOut(c5, d5, 30, 1, 'ϕ3', 5, dwg);
+drawDiamOut(c6, d6, 10, -1, 'ϕ8', 5, dwg);
